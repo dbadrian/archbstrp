@@ -90,7 +90,7 @@ mkdir -p /mnt/var
 mount -o $opts_btrfs,subvol=@var /dev/disk/by-partlabel/system /mnt/var
 
 mkdir /mnt/boot
-mount LABEL=EFI /mnt/boot
+mount LABEL=EFI /mnt/boot/
 
 # install base system
 pacstrap /mnt base linux linux-firmware amd-ucode git btrfs-progs
@@ -114,4 +114,12 @@ arch-chroot /mnt chsh -s /usr/bin/zsh
 echo "$user:$password" | chpasswd --root /mnt
 echo "root:$password" | chpasswd --root /mnt
 
+
+pacstrap /mnt grub efibootmgr
+
+arch-chroot grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+arch-chroot grub-mkconfig -o /boot/grub/grub.cfg
+
 echo "continue by cloning the remaining repo"
+
+# networkmanager network-manager-applet dialog wpa_supplicant mtools dosfstools reflector base-devel linux-headers avahi xdg-user-dirs xdg-utils gvfs gvfs-smb nfs-utils inetutils dnsutils bluez bluez-utils cups hplip alsa-utils pipewire pipewire-alsa pipewire-pulse pipewire-jack openssh rsync acpi acpi_call virt-manager qemu qemu-arch-extra edk2-ovmf bridge-utils dnsmasq vde2 openbsd-netcat iptables-nft ipset firewalld flatpak sof-firmware nss-mdns acpid os-prober ntfs-3g terminus-font

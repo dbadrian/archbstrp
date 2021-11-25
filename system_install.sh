@@ -89,11 +89,12 @@ mount -o $opts_btrfs,subvol=@snapshots /dev/disk/by-partlabel/system /mnt/.snaps
 mkdir -p /mnt/var
 mount -o $opts_btrfs,subvol=@var /dev/disk/by-partlabel/system /mnt/var
 
+mkdir /mnt/boot
 mount LABEL=EFI /mnt/boot
 
 # install base system
-pacstrap /mnt base linux linux-firmware amd-ucode git btrfs-progs zsh
-pacstrap /mnt man-db man-pages bash-completion zsh-completion nano
+pacstrap /mnt base linux linux-firmware amd-ucode git btrfs-progs
+pacstrap /mnt man-db man-pages bash-completion zsh zsh-completions nano
 
 # generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab

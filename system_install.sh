@@ -73,7 +73,7 @@ swapon -L swap
 # SYSTEM / ROOT
 mkfs.btrfs -f -L system /dev/disk/by-partlabel/system
 mount -t btrfs LABEL=system /mnt
-btrfs subvolume create /mnt/@root
+btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@home
 btrfs subvolume create /mnt/@snapshots
 btrfs subvolume create /mnt/@var

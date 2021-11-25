@@ -94,7 +94,7 @@ mount LABEL=EFI /mnt/boot/
 
 # install base system
 pacstrap /mnt base linux linux-firmware amd-ucode git btrfs-progs
-pacstrap /mnt man-db man-pages bash-completion zsh zsh-completions nano
+pacstrap /mnt man-db man-pages bash-completion zsh zsh-completions nano sudo
 
 # generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -114,6 +114,7 @@ arch-chroot /mnt chsh -s /usr/bin/zsh
 echo "$user:$password" | chpasswd --root /mnt
 echo "root:$password" | chpasswd --root /mnt
 
+echo "$user ALL=(ALL) ALL" >> /etc/sudoers.d/$user
 
 pacstrap /mnt grub efibootmgr
 

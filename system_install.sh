@@ -81,15 +81,13 @@ umount -R /mnt
 
 opts_btrfs=noatime,compress=zstd,discard=async,ssd
 
-mount -t btrfs -o subvol=root,$o_btrfs LABEL=system /mnt
-
-mount -o $o_btrfs,subvol=@ /dev/disk/by-partlabel/system /mnt
+mount -o $opts_btrfs,subvol=@ /dev/disk/by-partlabel/system /mnt
 mkdir /mnt/home
-mount -o $o_btrfs,subvol=@home /dev/disk/by-partlabel/system /mnt/home
+mount -o $opts_btrfs,subvol=@home /dev/disk/by-partlabel/system /mnt/home
 mkdir /mnt/.snapshots
-mount -o $o_btrfs,subvol=@snapshots /dev/disk/by-partlabel/system /mnt/.snapshots
+mount -o $opts_btrfs,subvol=@snapshots /dev/disk/by-partlabel/system /mnt/.snapshots
 mkdir -p /mnt/var
-mount -o $o_btrfs,subvol=@var /dev/disk/by-partlabel/system /mnt/var
+mount -o $opts_btrfs,subvol=@var /dev/disk/by-partlabel/system /mnt/var
 
 mount LABEL=EFI /mnt/boot
 

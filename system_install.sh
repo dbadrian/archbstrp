@@ -52,19 +52,19 @@ timedatectl set-ntp true
 ### Setup the disk and partitions ###
 swap_size=$(free --mebi | awk '/Mem:/ {print $2}')
 swap_end=$(( $swap_size + 1024 + 550))MiB
-echo "Using $swap_size MiB of swap"
+echo "Using $swap_size+ 1024 MiB of swap"
 
 # get rid of any partition tables etc.
 sgdisk --zap-all ${device}
 
-parted --script "${device}" -- mklabel gpt \
+parted --script ${device} -- mklabel gpt \
   mkpart "EFI" fat32 1Mib 550MiB \
   set 1 boot on \
   mkpart "swap" linux-swap 550MiB ${swap_end} \
   mkpart "system" btrfs ${swap_end} 100%
 
 # EFI
-mkfs.vfat  -n EFI /dev/disk/by-partlabel/EFI
+mkfs.vfat -n EFI /dev/disk/by-partlabel/EFI
 
 # SWAP
 mkswap -L swap /dev/disk/by-partlabel/swap

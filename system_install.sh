@@ -64,10 +64,9 @@ parted --script "${device}" -- mklabel gpt \
   mkpart "system" btrfs ${swap_end} 100%
 
 # EFI
-mkfs.fat -F32 -n EFI /dev/disk/by-partlabel/EFI
+mkfs.vfat  -n EFI /dev/disk/by-partlabel/EFI
 
 # SWAP
-mkfs.vfat -n EFI "${part_boot}"
 mkswap -L swap /dev/disk/by-partlabel/swap
 swapon -L swap
 

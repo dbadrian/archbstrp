@@ -93,7 +93,7 @@ mount LABEL=EFI /mnt/boot
 
 # install base system
 pacstrap /mnt base linux linux-firmware amd-ucode git btrfs-progs zsh
-pacstrap /mnt man-db man-pages bash-completion nano # replace "nano" with your favorite command line text editor
+pacstrap /mnt man-db man-pages bash-completion zsh-completion nano
 
 # generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab

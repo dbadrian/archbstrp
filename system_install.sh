@@ -1,7 +1,20 @@
 #!/bin/bash
 
+# Partially based on https://github.com/mdaffin/arch-pkgs/blob/master/installer/install-arch
+# Kudos to mdaffin
+
 set -uo pipefail # exit on any failure
 trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
+
+MIRRORLIST_URL="https://archlinux.org/mirrorlist/?country=DE&protocol=https&use_mirror_status=on"
+
+pacman -Sy --noconfirm pacman-contrib dialog
+
+echo "Updating mirror list"
+curl -s "$MIRRORLIST_URL" | \
+    sed -e 's/^#Server/Server/' -e '/^#/d' | \
+    rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
+
 
 
 ### Get information from user ###

@@ -125,4 +125,7 @@ arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 pacstrap /mnt openssh
 arch-chroot /mnt systemctl enable sshd
 
+arch-chroot /mnt git clone https://github.com/dbadrian/archbstrp.git /tmp/arbs
+arch-chroot /mnt bash /tmp/arbs/system_install_2nd_stage.sh
+
 echo ">>>>>>>> Basic System Installed <<<<<<<<"

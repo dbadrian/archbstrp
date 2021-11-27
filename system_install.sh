@@ -93,8 +93,8 @@ mkdir /mnt/boot
 mount LABEL=EFI /mnt/boot/
 
 # install base system
-pacstrap /mnt base linux linux-firmware amd-ucode git btrfs-progs
-pacstrap /mnt man-db man-pages bash-completion zsh zsh-completions nano sudo
+pacstrap /mnt base linux linux-firmware amd-ucode git btrfs-progs base-devel
+pacstrap /mnt man-db man-pages nano pacman-contrib
 
 # generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -108,13 +108,21 @@ echo '127.0.0.1 localhost
 echo "LANG=en_GB.UTF-8" > /mnt/etc/locale.conf
 arch-chroot /mnt locale-gen
 
+echo "Updating mirror list"
+curl -s "$MIRRORLIST_URL" | \
+    sed -e 's/^#Server/Server/' -e '/^#/d' | \
+    rankmirrors -n 5 - > /mnt/etc/pacman.d/mirrorlist
+
+
+
 arch-chroot /mnt useradd -mU -s /usr/bin/zsh -G wheel,uucp,video,audio,storage,games,input "$user"
 arch-chroot /mnt chsh -s /usr/bin/zsh
+touch /mnt/home/$user/.zshrc
 
 echo "$user:$password" | chpasswd --root /mnt
 echo "root:$password" | chpasswd --root /mnt
 
-echo "$user ALL=(ALL) ALL" >> /etc/sudoers.d/$user
+echo "$user ALL=(ALL) ALL" >> /mnt/etc/sudoers.d/$user
 
 pacstrap /mnt grub efibootmgr
 
@@ -125,7 +133,7 @@ arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 pacstrap /mnt openssh
 arch-chroot /mnt systemctl enable sshd
 
-arch-chroot /mnt git clone https://github.com/dbadrian/archbstrp.git /tmp/arbs
-arch-chroot /mnt bash /tmp/arbs/system_install_2nd_stage.sh
+# Adjust this to your own second stage file
+arch-chroot /mnt curl -sL git.io/JMmgX | su $user bash
 
 echo ">>>>>>>> Basic System Installed <<<<<<<<"

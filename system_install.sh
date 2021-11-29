@@ -94,7 +94,9 @@ mount LABEL=EFI /mnt/boot/
 
 # install base system
 pacstrap /mnt base linux linux-firmware amd-ucode git btrfs-progs base-devel
-pacstrap /mnt man-db man-pages nano pacman-contrib
+pacstrap /mnt man-db man-pages nano pacman-contrib zsh
+pacstrap /mnt openssh
+arch-chroot /mnt systemctl enable sshd
 
 # generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -113,25 +115,21 @@ curl -s "$MIRRORLIST_URL" | \
     sed -e 's/^#Server/Server/' -e '/^#/d' | \
     rankmirrors -n 5 - > /mnt/etc/pacman.d/mirrorlist
 
-
-
+echo "Setting default shell for created user"
 arch-chroot /mnt useradd -mU -s /usr/bin/zsh -G wheel,uucp,video,audio,storage,games,input "$user"
 arch-chroot /mnt chsh -s /usr/bin/zsh
 touch /mnt/home/$user/.zshrc
 
+echo "Setting passwords"
 echo "$user:$password" | chpasswd --root /mnt
 echo "root:$password" | chpasswd --root /mnt
-
 echo "$user ALL=(ALL) ALL" >> /mnt/etc/sudoers.d/$user
 
+echo "Setting up GRUB"
 pacstrap /mnt grub efibootmgr
 
 arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
-
-# Install some more final packages
-pacstrap /mnt openssh
-arch-chroot /mnt systemctl enable sshd
 
 # Adjust this to your own second stage file
 arch-chroot /mnt curl -sL git.io/JMmgX | su $user bash

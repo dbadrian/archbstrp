@@ -2,7 +2,7 @@
 pkgbase=dba
 pkgname=(dba-base dba-desktop)
 pkgver=1
-pkgrel=3
+pkgrel=7
 pkgdesc="DBA setup"
 arch=(any)
 url="https://github.com/dbadrian/archbtsrp"
@@ -43,6 +43,9 @@ package_dba-base() {
 
     # Backup solutions
     depends+=(restic)
+
+    # hardware tools
+    depends+=(lm_sensors i2c-tools)
 }
 
 
@@ -55,11 +58,24 @@ package_dba-desktop() {
 #    install=dba-desktop.install
 
     depends=(dba-base)
+ 
+    # Xorg
+    depends+=(xorg-server xorg-xinit) # xorg-apps)
 
     # I3 Desktop
-    depends+=(i3-wm i3status i3blocks i3lock rofi)
+    depends+=(i3-wm i3status i3blocks i3lock dmenu xss-lock)
+
+    # GPU hardware
+    depends+=(xf86-video-amdgpu mesa vulkan-radeon)
+
+    # video acceleration
+    depends+=(libva-mesa-driver mesa-vdpau)
+
+    # terminal stuff
+    depends+=(terminator)
 
     optdepends=(okular)
 
     optdepends+=(brightnessctl)
 }
+

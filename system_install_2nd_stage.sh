@@ -6,21 +6,21 @@
 set -uo pipefail # exit on any failure
 trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 
-EMAIL=$(dialog --stdout --inputbox "Enter email" 0 0) || exit 1
-clear
-: ${EMAIL:?"email cannot be empty"}
+#EMAIL=$(dialog --stdout --inputbox "Enter email" 0 0) || exit 1
+#clear
+#: ${EMAIL:?"email cannot be empty"}
 
-GITHUB_USERNAME=$(dialog --stdout --inputbox "Github username" 0 0) || exit 1
-clear
-: ${GITHUB_USERNAME:?"email cannot be empty"}
+#GITHUB_USERNAME=$(dialog --stdout --inputbox "Github username" 0 0) || exit 1
+#clear
+#: ${GITHUB_USERNAME:?"email cannot be empty"}
 
-GITHUB_KEY_NAME=$(dialog --stdout --inputbox "Github key name for this machine" 0 0) || exit 1
-clear
-: ${GITHUB_KEY_NAME:?"email cannot be empty"}
+#GITHUB_KEY_NAME=$(dialog --stdout --inputbox "Github key name for this machine" 0 0) || exit 1
+#clear
+#: ${GITHUB_KEY_NAME:?"email cannot be empty"}
 
-EMAIL="dawidh.adrian@googlemail.com"
-GITHUB_USERNAME="dbadrian"
-GITHUB_KEY_NAME="laptop"
+#EMAIL="dawidh.adrian@googlemail.com"
+#GITHUB_USERNAME="dbadrian"
+#GITHUB_KEY_NAME="laptop"
 
 ############## DO NOT MODIFY BELOW THIS LINE ###########
 # This does not resolve from a symlink location
@@ -54,17 +54,17 @@ create_ssh_key() {
 
 MAKEFLAGS="-j$(nproc)"
 
-echo "Installing SSH"
-pacman -Syu --noconfirm openssh
-echo "Enabling SSH"
-systemctl enable sshd
+#echo "Installing SSH"
+#pacman -Syu --noconfirm openssh
+#echo "Enabling SSH"
+#systemctl enable sshd
 
 cd /tmp
 
 echo "Installing yay"
 sudo pacman -S --noconfirm go
 git clone https://aur.archlinux.org/yay.git
-cd yay-bin
+cd yay
 chown -R $user:$user
 makepkg -si
 

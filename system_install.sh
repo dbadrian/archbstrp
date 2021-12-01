@@ -94,7 +94,7 @@ mount LABEL=EFI /mnt/boot/
 
 # install base system
 pacstrap /mnt base linux linux-firmware amd-ucode git btrfs-progs base-devel
-pacstrap /mnt man-db man-pages nano pacman-contrib zsh
+pacstrap /mnt man-db man-pages nano pacman-contrib zsh dialog
 pacstrap /mnt openssh
 arch-chroot /mnt systemctl enable sshd
 
@@ -130,8 +130,5 @@ pacstrap /mnt grub efibootmgr
 
 arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
-
-# Adjust this to your own second stage file
-arch-chroot /mnt curl -sL git.io/JMmgX | su $user bash
 
 echo ">>>>>>>> Basic System Installed <<<<<<<<"

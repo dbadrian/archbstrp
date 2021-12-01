@@ -88,8 +88,13 @@ mount LABEL=EFI /mnt/boot/
 # install base system
 pacstrap /mnt base linux linux-firmware amd-ucode git btrfs-progs base-devel
 pacstrap /mnt man-db man-pages nano pacman-contrib zsh dialog
+
+# some networking
 pacstrap /mnt openssh
 arch-chroot /mnt systemctl enable sshd
+
+pacstrap /mnt networkmanager
+arch-chroot /mnt systemctl enable networkmanager
 
 # generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab

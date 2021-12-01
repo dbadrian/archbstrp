@@ -94,7 +94,7 @@ pacstrap /mnt openssh
 arch-chroot /mnt systemctl enable sshd
 
 pacstrap /mnt networkmanager
-arch-chroot /mnt systemctl enable networkmanager
+arch-chroot /mnt systemctl enable NetworkManager.service
 
 # generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab

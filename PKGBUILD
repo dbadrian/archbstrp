@@ -78,7 +78,7 @@ package_dba-desktop() {
     depends+=(firefox) # google-chrome)
 
     # audio
-    depends+=(pipewire pipewire-alsa pipewire-jack pipewire-pulse wireplumber)
+    depends+=(pipewire pipewire-alsa pipewire-jack pipewire-pulse wireplumber pavucontrol)
 
     # bluetooth
     depends+=(bluez bluez-utils)

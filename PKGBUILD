@@ -2,7 +2,7 @@
 pkgbase=dba
 pkgname=(dba-base dba-desktop)
 pkgver=1
-pkgrel=9
+pkgrel=11
 pkgdesc="DBA setup"
 arch=(any)
 url="https://github.com/dbadrian/archbtsrp"
@@ -76,6 +76,9 @@ package_dba-desktop() {
 
     # browsers
     depends+=(firefox) # google-chrome)
+
+    # audio
+    depends+=(pipewire pipewire-alsa pipewire-jack pipewire-pulse pipewire-media-session)
 
     # bluetooth
     depends+=(bluez bluez-utils)

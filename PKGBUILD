@@ -2,7 +2,7 @@
 pkgbase=dba
 pkgname=(dba-base dba-desktop)
 pkgver=1
-pkgrel=1
+pkgrel=3
 pkgdesc="DBA setup"
 arch=(any)
 url="https://github.com/dbadrian/archbtsrp"
@@ -31,14 +31,18 @@ package_dba-base() {
     depends+=(
         ripgrep exa fd wget fzf unzip zip dialog pacman-contrib bat ncdu ranger
     )
-        # Filesystems
-    depends+=(e2fsprogs exfat-utils dosfstools f2fs-tools)
+
+    # Filesystems
+    depends+=(e2fsprogs exfat-utils dosfstools btrfs-progs ntfs-3g)
 
     # Networking
-    depends+=(nftables iw iwd avahi nss-mdns openssh)
+    depends+=(openssh)
 
     # General tools
-    depends+=(git cmake)
+    depends+=(git cmake diff-so-fancy)
+
+    # Backup solutions
+    depends+=(restic)
 }
 
 
@@ -48,7 +52,7 @@ package-dba-devel() {
 }
 
 package_dba-desktop() {
-    install=dba-desktop.install
+#    install=dba-desktop.install
 
     depends=(dba-base)
 

@@ -2,7 +2,7 @@
 pkgbase=dba
 pkgname=(dba-base dba-desktop)
 pkgver=1
-pkgrel=13
+pkgrel=17
 pkgdesc="DBA setup"
 arch=(any)
 url="https://github.com/dbadrian/archbtsrp"
@@ -20,6 +20,8 @@ package_dba-base() {
     # Core tools
     depends+=(
         nano
+        htop
+        glances	    
     )
 
     # Shell
@@ -46,6 +48,9 @@ package_dba-base() {
 
     # hardware tools
     depends+=(lm_sensors i2c-tools)
+
+    # analysis test etc.
+    #depends+=(phoronix-test-suite)
 }
 
 
@@ -66,7 +71,7 @@ package_dba-desktop() {
     depends+=(i3-wm i3status i3blocks i3lock dmenu xss-lock)
 
     # GPU hardware
-    depends+=(xf86-video-amdgpu mesa vulkan-radeon)
+    depends+=(xf86-video-amdgpu mesa vulkan-radeon radeontop)
 
     # video acceleration
     depends+=(libva-mesa-driver mesa-vdpau libva-utils vdpauinfo)
@@ -82,6 +87,9 @@ package_dba-desktop() {
 
     # bluetooth
     depends+=(bluez bluez-utils blueman)
+
+    # messengers
+    depends+=(signal-desktop telegram-desktop)
 
     optdepends=(okular)
 

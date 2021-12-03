@@ -50,44 +50,11 @@ echo "Using $swap_size+ 1024 MiB of swap"
 # get rid of any partition tables etc.
 sgdisk --zap-all ${device}
 
-# parted --script ${device} -- mklabel gpt \
-#   mkpart "EFI" fat32 1Mib 550MiB \
-#   set 1 boot on \
-#   mkpart "swap" linux-swap 550MiB ${swap_end} \
-#   mkpart "system" btrfs ${swap_end} 100%
-
-# # EFI
-# mkfs.vfat -n EFI /dev/disk/by-partlabel/EFI
-
-# # SWAP
-# mkswap -L swap /dev/disk/by-partlabel/swap
-# swapon -L swap
-
-# # SYSTEM / ROOT
-# mkfs.btrfs -f -L system /dev/disk/by-partlabel/system
-# mount -t btrfs LABEL=system /mnt
-# btrfs subvolume create /mnt/@
-# btrfs subvolume create /mnt/@home
-# btrfs subvolume create /mnt/@snapshots
-# btrfs subvolume create /mnt/@var
-# umount -R /mnt
-
-# opts_btrfs=noatime,compress=zstd,discard=async,ssd
-
-# mount -o $opts_btrfs,subvol=@ /dev/disk/by-partlabel/system /mnt
-# mkdir /mnt/home
-# mount -o $opts_btrfs,subvol=@home /dev/disk/by-partlabel/system /mnt/home
-# mkdir /mnt/.snapshots
-# mount -o $opts_btrfs,subvol=@snapshots /dev/disk/by-partlabel/system /mnt/.snapshots
-# mkdir -p /mnt/var
-# mount -o $opts_btrfs,subvol=@var /dev/disk/by-partlabel/system /mnt/var
-
-
 parted --script ${device} -- mklabel gpt \
   mkpart "EFI" fat32 1Mib 550MiB \
   set 1 boot on \
   mkpart "swap" linux-swap 550MiB ${swap_end} \
-  mkpart "system" ext4 ${swap_end} 100%
+  mkpart "system" btrfs ${swap_end} 100%
 
 # EFI
 mkfs.vfat -n EFI /dev/disk/by-partlabel/EFI
@@ -97,8 +64,23 @@ mkswap -L swap /dev/disk/by-partlabel/swap
 swapon -L swap
 
 # SYSTEM / ROOT
-mkfs.ext4 -b 4096 system /dev/disk/by-partlabel/system
-mount LABEL=system /mnt
+mkfs.btrfs -f -L system /dev/disk/by-partlabel/system
+mount -t btrfs LABEL=system /mnt
+btrfs subvolume create /mnt/@
+btrfs subvolume create /mnt/@home
+btrfs subvolume create /mnt/@snapshots
+btrfs subvolume create /mnt/@var
+umount -R /mnt
+
+opts_btrfs=noatime,compress=zstd,discard=async,ssd
+
+mount -o $opts_btrfs,subvol=@ /dev/disk/by-partlabel/system /mnt
+mkdir /mnt/home
+mount -o $opts_btrfs,subvol=@home /dev/disk/by-partlabel/system /mnt/home
+mkdir /mnt/.snapshots
+mount -o $opts_btrfs,subvol=@snapshots /dev/disk/by-partlabel/system /mnt/.snapshots
+mkdir -p /mnt/var
+mount -o $opts_btrfs,subvol=@var /dev/disk/by-partlabel/system /mnt/var
 
 mkdir /mnt/boot
 mount LABEL=EFI /mnt/boot/

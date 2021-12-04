@@ -1,8 +1,8 @@
 # Maintainer: Michael Daffin <michael@daffin.io>
 pkgbase=dba
-pkgname=(dba-base dba-desktop)
+pkgname=(dba-base dba-desktop dba-dev dba-image)
 pkgver=1
-pkgrel=17
+pkgrel=27
 pkgdesc="DBA setup"
 arch=(any)
 url="https://github.com/dbadrian/archbtsrp"
@@ -15,13 +15,28 @@ package_dba-base() {
     provides=(dba-base)
     conflicts=(dba-base)
     replaces=(dba-base)
-    # install=dba-base.install
+    install=dba-base.install
 
     # Core tools
     depends+=(
+        dialog
+        pacman-contrib
         nano
-        htop
-        glances	    
+        tmux
+        tree
+    )
+
+    # arch tools
+    depends+=(
+        auracle-git
+        downgrade
+        pkgtools
+        pacman-cleanup-hook
+    )
+
+    # Display manager
+    depends+=(
+        ly
     )
 
     # Shell
@@ -31,44 +46,71 @@ package_dba-base() {
 
     # Extra general packages
     depends+=(
-        ripgrep exa fd wget fzf unzip zip dialog pacman-contrib bat ncdu ranger
+        htop        # status 
+        glances-git # status
+        ripgrep     # faster grep
+        exa     # ls replacement
+        fd      # find replacement
+        wget    # you know
+        fzf     # fuzzy command line finder
+        bat     # cat alternative
+        ncdu    # file sizes finder
+        ranger  # console file explorer
+    )
+
+    # compression related things
+    depends+=(
+        unzip
+        zip
+        p7zip
     )
 
     # Filesystems
-    depends+=(e2fsprogs exfat-utils dosfstools btrfs-progs ntfs-3g)
+    depends+=(
+        e2fsprogs
+        exfat-utils
+        dosfstools
+        btrfs-progs
+        ntfs-3g
+        sshfs
+        compsize # btrfs compression rate
+    )
 
-    # Networking
+    # Networking / Keys
     depends+=(openssh)
 
-    # General tools
-    depends+=(git cmake diff-so-fancy)
+    # keys and passwords
+    depends+=(gnome-keyring gnupg pass)
 
-    # Backup solutions
-    depends+=(restic)
+    # General tools
+    depends+=(git cmake diff-so-fancy gitg)
+
+    # Backup solutions and other file related things
+    depends+=(restic rsync)
 
     # hardware tools
     depends+=(lm_sensors i2c-tools)
-
-    # analysis test etc.
-    #depends+=(phoronix-test-suite)
 }
 
-
-package-dba-devel() {
-    # Docker
-    depends+=(docker docker-compose dnsmasq rancher-k3d-bin kubectl k9s kind)
-}
 
 package_dba-desktop() {
     install=dba-desktop.install
 
     depends=(dba-base)
  
+    # text editor
+    depends+=(sublime-text-3)
+
     # Xorg
-    depends+=(xorg-server xorg-xinit arandr) # xorg-apps)
+    depends+=(
+        xorg-server
+        xorg-xinit
+        # xorg-apps
+        arandr
+    )
 
     # I3 Desktop
-    depends+=(i3-wm i3status i3blocks i3lock dmenu xss-lock)
+    depends+=(i3-wm i3status i3blocks i3lock i3wsr dmenu xss-lock)
 
     # GPU hardware
     depends+=(xf86-video-amdgpu mesa vulkan-radeon radeontop)
@@ -80,19 +122,269 @@ package_dba-desktop() {
     depends+=(terminator)
 
     # browsers
-    depends+=(firefox) # google-chrome)
+    depends+=(firefox google-chrome)
 
     # audio
-    depends+=(pipewire pipewire-alsa pipewire-jack pipewire-pulse wireplumber pavucontrol libldac) #pulseaudio-modules-bt
+    depends+=(
+        alsa-utils
+        pipewire
+        pipewire-alsa
+        pipewire-jack
+        pipewire-pulse
+        wireplumber
+        pavucontrol
+        libldac
+        # pulseaudio-modules-bt # conflicts pipewire now
+    )
+
+    # connectivity
+    depends+=(
+        wpa_supplicant
+        networkmanager
+        network-manager-applet
+    )
 
     # bluetooth
     depends+=(bluez bluez-utils blueman)
 
     # messengers
-    depends+=(signal-desktop telegram-desktop)
+    depends+=(signal-desktop telegram-desktop zoom skypeforlinux-stable-bin)
 
+    # keys
+    depends+=(seahorse)
+
+    # printing
+    depends+=(
+        cups
+        hplip
+        kyocera-ecosys-m552x-p502x
+    )
+
+    # media
+    depends+=(
+        mplayer
+        vlc
+    )
+
+    # PDF
     optdepends=(okular)
 
     optdepends+=(brightnessctl)
 }
 
+# general tools
+#################################
+# jdownloader2
+# masterpdfeditor
+# redshift-git
+# redshift-gtk-git
+# aria2
+# file-roller
+# flameshot
+# genius
+
+
+package_dba-dev() {
+
+    depends=(dba-desktop)
+
+    # Docker
+    depends+=(docker docker-compose)
+
+    # vscode
+    depends+=(visual-studio-code-bin)
+
+    # more git related stuff
+    depends+=(
+        gitg
+        kdiff3
+    )
+
+    # coverage
+    depends+=(
+        lcov
+    )
+
+    # flutter/android related
+    depends+=(
+        android-platform
+        android-sdk
+        android-sdk-build-tools
+        android-sdk-cmdline-tools-latest
+        android-sdk-platform-tools
+        # android-studio
+        # flutter-group-pacman-hook # only needed if flutter is installed!?
+    )
+
+    # some hardware related debugging tools
+    depends+=(
+        usbtop
+    )
+
+    # binary analysis tools
+    depends+=(
+        bytewalk
+        binwalk
+        ddrescue
+        # jd-gui # java decompiler
+    )
+
+    # compiler
+    depends+=(
+        ccache
+        clang
+        cloc
+    )
+
+}
+
+package_dba-finance() {
+    depends=(dba-desktop)
+
+    depends+=(
+        hibiscus
+        jameica
+    )
+}
+
+package_dba-image() {
+    depends=(dba-desktop)
+
+    depends+=(
+        darktable
+        inkscape
+        gimp
+    )
+}
+
+package_dba-tex() {
+    depends=(dba-desktop)
+
+    depends+=(
+        texlive-most
+        texlive-langjapanese
+        texlive-localmanager-git
+        texstudio
+    )
+}
+
+package_dba-notes() {
+    depends=(dba-desktop)
+
+    depends+=(
+        zotero
+        joplin-desktop
+        libreoffice-fresh
+        libreoffice-fresh-de
+    )
+}
+
+package_dba-arduino() {
+    depends=(dba-desktop)
+
+    depends+=(
+        adafruit-ampy
+        arduino-ide
+        rshell
+        avrdude
+        minicom
+    )
+}
+
+
+package_dba-font() {
+    depends=(dba-base)
+
+    depends+=(
+        # acroread-fonts-systemwide
+        # adobe-base-14-fonts
+        # awesome-terminal-fonts-git
+        # awesome-terminal-fonts-patched
+        # ttf-inconsolata-g
+        # ttf-koruri
+        # ttf-monapo
+        # ttf-mplus
+        # ttf-ms-fonts
+        # ttf-vlgothic
+        # otf-eb-garamond
+    )
+}
+
+package_dba-circuit() {
+    depends+=(
+        gspiceui
+        veroroute
+        owon-vds-tiny
+        ngspice-git
+        qucs
+        kicad
+        kicad-library
+    )
+}
+
+
+# hardware
+#################################
+# openrgb
+# zenmonitor3-git
+# zenpower3-dkms
+
+
+# devtools
+#################################
+# act # github actions testing 
+# postman-bin
+
+# arduino shit
+#################################
+
+# console tools
+#################################
+# ansiweather
+# colout-git # color arbritary console outpit
+# fasd-git # faster console stuff, not sure if needed with zsh
+# wget
+
+# 6502 shit
+#################################
+# asm6f
+# dasm
+
+# arch tools
+#################################
+# auracle-git
+# downgrade
+# pkgtools
+# pacman-cleanup-hook
+
+
+# encryption
+#################################
+# dislocker
+
+# music
+#################################
+# vcvrack-git
+# libopenaptx
+
+
+
+# multilingual
+#################################
+# uim
+# ibus-qt
+
+
+
+# laptop stuff
+#################################
+# intelbacklight-git
+# laptop-mode-tools
+
+
+# aspell-en
+
+# xflux
+# xflux-gui-git
+# yay
+# texstudio

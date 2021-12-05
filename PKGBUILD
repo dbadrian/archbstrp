@@ -2,7 +2,7 @@
 pkgbase=dba
 pkgname=(dba-base dba-desktop dba-dev dba-image dba-circuit dba-arduino dba-notes dba-tex dba-finance )
 pkgver=1
-pkgrel=31
+pkgrel=32
 pkgdesc="DBA setup"
 arch=(any)
 url="https://github.com/dbadrian/archbtsrp"
@@ -98,7 +98,7 @@ package_dba-desktop() {
     install=dba-desktop.install
 
     depends=(dba-base)
- 
+
     # text editor
     depends+=(sublime-text-3)
 
@@ -181,28 +181,24 @@ package_dba-desktop() {
         # fasd-git # faster console stuff, not sure if needed with zsh
     )
 
+    # archive/compress
+    depends+=(
+        file-roller
+    )
+
     #qol
     depends+=(
-       flameshot
+        flameshot
+        redshift-git
+        redshift-gtk-git
     )
 
     # PDF
-    optdepends=(
-        'okular: alternative pdf reader'
+    depends+=(
+        okular
+        masterpdfeditor
     )
-
-    # optdepends+=(brightnessctl)
 }
-
-# general tools
-#################################
-# jdownloader2
-# masterpdfeditor
-# redshift-git
-# redshift-gtk-git
-# file-roller
-# flameshot
-# 
 
 
 package_dba-dev() {
@@ -257,10 +253,15 @@ package_dba-dev() {
         cloc
     )
 
+    # rest debugging and stuff
+    depends+=(
+        postman-bin
+    )
+
     # devtools
     #################################
     # act # github actions testing 
-    # postman-bin
+    # 
 
 }
 

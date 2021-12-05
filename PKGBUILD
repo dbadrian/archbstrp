@@ -1,8 +1,8 @@
 # Maintainer: Michael Daffin <michael@daffin.io>
 pkgbase=dba
-pkgname=(dba-base dba-desktop dba-dev dba-image)
+pkgname=(dba-base dba-desktop dba-dev dba-image dba-circuit dba-arduino dba-notes dba-tex dba-finance )
 pkgver=1
-pkgrel=27
+pkgrel=31
 pkgdesc="DBA setup"
 arch=(any)
 url="https://github.com/dbadrian/archbtsrp"
@@ -74,6 +74,7 @@ package_dba-base() {
         ntfs-3g
         sshfs
         compsize # btrfs compression rate
+        dislocker # bitlocker access
     )
 
     # Networking / Keys
@@ -150,7 +151,7 @@ package_dba-desktop() {
     # messengers
     depends+=(signal-desktop telegram-desktop zoom skypeforlinux-stable-bin)
 
-    # keys
+    # keys/ pass /gnupg
     depends+=(seahorse)
 
     # printing
@@ -166,10 +167,31 @@ package_dba-desktop() {
         vlc
     )
 
-    # PDF
-    optdepends=(okular)
+    # downloader stuff
+    depends+=(
+        aria2
+        wget
+    )
 
-    optdepends+=(brightnessctl)
+    # console tools
+    depends+=(
+        genius
+        # ansiweather
+        # colout-git # color arbritary console outpit
+        # fasd-git # faster console stuff, not sure if needed with zsh
+    )
+
+    #qol
+    depends+=(
+       flameshot
+    )
+
+    # PDF
+    optdepends=(
+        'okular: alternative pdf reader'
+    )
+
+    # optdepends+=(brightnessctl)
 }
 
 # general tools
@@ -178,10 +200,9 @@ package_dba-desktop() {
 # masterpdfeditor
 # redshift-git
 # redshift-gtk-git
-# aria2
 # file-roller
 # flameshot
-# genius
+# 
 
 
 package_dba-dev() {
@@ -236,6 +257,11 @@ package_dba-dev() {
         cloc
     )
 
+    # devtools
+    #################################
+    # act # github actions testing 
+    # postman-bin
+
 }
 
 package_dba-finance() {
@@ -261,9 +287,9 @@ package_dba-tex() {
     depends=(dba-desktop)
 
     depends+=(
-        texlive-most
+        # texlive-most
         texlive-langjapanese
-        texlive-localmanager-git
+        # texlive-localmanager-git
         texstudio
     )
 }
@@ -273,7 +299,7 @@ package_dba-notes() {
 
     depends+=(
         zotero
-        joplin-desktop
+        # joplin-desktop
         libreoffice-fresh
         libreoffice-fresh-de
     )
@@ -284,7 +310,7 @@ package_dba-arduino() {
 
     depends+=(
         adafruit-ampy
-        arduino-ide
+        # arduino-ide
         rshell
         avrdude
         minicom
@@ -312,16 +338,30 @@ package_dba-font() {
 
 package_dba-circuit() {
     depends+=(
-        gspiceui
         veroroute
         owon-vds-tiny
-        ngspice-git
         qucs
         kicad
         kicad-library
+        # gspiceui
+        # ngspice-git
     )
 }
 
+
+# package_dba-music() {
+#     depends+=(
+#         # vcvrack-git
+#         libopenaptx
+#     )
+# }
+
+# package_dba-laptop() {
+#     depends+=(
+#         # laptop-mode-tools
+#         # intelbacklight-git
+#     )
+# }
 
 # hardware
 #################################
@@ -329,62 +369,12 @@ package_dba-circuit() {
 # zenmonitor3-git
 # zenpower3-dkms
 
-
-# devtools
-#################################
-# act # github actions testing 
-# postman-bin
-
-# arduino shit
-#################################
-
-# console tools
-#################################
-# ansiweather
-# colout-git # color arbritary console outpit
-# fasd-git # faster console stuff, not sure if needed with zsh
-# wget
-
 # 6502 shit
 #################################
 # asm6f
 # dasm
 
-# arch tools
-#################################
-# auracle-git
-# downgrade
-# pkgtools
-# pacman-cleanup-hook
-
-
-# encryption
-#################################
-# dislocker
-
-# music
-#################################
-# vcvrack-git
-# libopenaptx
-
-
-
 # multilingual
 #################################
 # uim
 # ibus-qt
-
-
-
-# laptop stuff
-#################################
-# intelbacklight-git
-# laptop-mode-tools
-
-
-# aspell-en
-
-# xflux
-# xflux-gui-git
-# yay
-# texstudio

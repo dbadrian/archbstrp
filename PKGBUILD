@@ -2,7 +2,7 @@
 pkgbase=dba
 pkgname=(dba-base dba-desktop dba-dev dba-image dba-circuit dba-arduino dba-notes dba-tex dba-finance )
 pkgver=1
-pkgrel=32
+pkgrel=35
 pkgdesc="DBA setup"
 arch=(any)
 url="https://github.com/dbadrian/archbtsrp"
@@ -28,7 +28,7 @@ package_dba-base() {
 
     # arch tools
     depends+=(
-        auracle-git
+#        auracle-git
         downgrade
         pkgtools
         pacman-cleanup-hook
@@ -157,6 +157,7 @@ package_dba-desktop() {
     # printing
     depends+=(
         cups
+        cups-pdf # to print pdfs
         hplip
         kyocera-ecosys-m552x-p502x
     )

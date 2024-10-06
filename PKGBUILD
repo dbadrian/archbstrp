@@ -2,7 +2,7 @@
 pkgbase=dba
 pkgname=(dba-base dba-desktop dba-dev dba-image dba-circuit dba-arduino dba-notes dba-tex dba-finance )
 pkgver=1
-pkgrel=35
+pkgrel=37
 pkgdesc="DBA setup"
 arch=(any)
 url="https://github.com/dbadrian/archbtsrp"
@@ -75,6 +75,7 @@ package_dba-base() {
         sshfs
         compsize # btrfs compression rate
         dislocker # bitlocker access
+	mtpfs # mobile phoe
     )
 
     # Networking / Keys
@@ -114,7 +115,7 @@ package_dba-desktop() {
     depends+=(i3-wm i3status i3blocks i3lock i3wsr dmenu xss-lock)
 
     # GPU hardware
-    depends+=(xf86-video-amdgpu mesa vulkan-radeon radeontop)
+    depends+=(xf86-video-amdgpu mesa radeontop) # vulkan-radeon
 
     # video acceleration
     depends+=(libva-mesa-driver mesa-vdpau libva-utils vdpauinfo)

@@ -135,7 +135,7 @@ echo $'Syncing data to the USB stick...\nPlease wait.'
 sync
 
 # Inform the user to safely unmount the USB
-echo "Data copied successfully. Please unmount '$usb_device' before removing it."
+echo "Data copied successfully. You can now safely remove '$usb_device' it."
 
 # Cleanup: Remove the temporary files
 rm -r "$ISOFILE" "$CHECKSUMFILE"

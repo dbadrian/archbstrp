@@ -65,7 +65,7 @@ fi
 
 # Use eval to expand options into individual arguments
 cpu_selection=$(eval dialog --radiolist \"Select your CPU type:\" 15 50 3 $options 3>&1 1>&2 2>&3)
-
+clear
 
 #########################################################################################
 #########################################################################################

@@ -15,6 +15,8 @@ curl -s "$MIRRORLIST_URL" | \
     sed -e 's/^#Server/Server/' -e '/^#/d' | \
     rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
 
+
+#########################################################################################
 ## Get information from user ###
 hostname=$(dialog --stdout --inputbox "Enter hostname" 0 0) || exit 1
 clear
@@ -34,6 +36,39 @@ clear
 devicelist=$(lsblk -dplnx size -o name,size | grep -Ev "boot|rpmb|loop" | tac)
 device=$(dialog --stdout --menu "Select installation disk" 0 0 0 ${devicelist}) || exit 1
 clear
+
+# Determine automatically if system is AMD or INTEL or neither
+# however make sure the user has to confirm this anyway
+# Detect the CPU vendor
+cpu_vendor=$(grep -m 1 'vendor_id' /proc/cpuinfo | awk '{print $3}')
+
+# Set the preselected option
+preselected=""
+if [ "$cpu_vendor" == "GenuineIntel" ]; then
+    preselected="intel"
+elif [ "$cpu_vendor" == "AuthenticAMD" ]; then
+    preselected="amd"
+else
+    preselected="nothing"
+fi
+
+preselected=nothing
+
+# Reorder options so that the preselected one comes first
+if [ "$preselected" == "intel" ]; then
+    options="intel 'Intel Processor' on amd 'AMD Processor' off nothing 'No specific processor' off"
+elif [ "$preselected" == "amd" ]; then
+    options="amd 'AMD Processor' on intel 'Intel Processor' off nothing 'No specific processor' off"
+else
+    options="nothing 'No specific processor' on intel 'Intel Processor' off AMD 'AMD Processor' off"
+fi
+
+# Use eval to expand options into individual arguments
+cpu_selection=$(eval dialog --radiolist \"Select your CPU type:\" 15 50 3 $options 3>&1 1>&2 2>&3)
+
+
+#########################################################################################
+#########################################################################################
 
 ### Set up logging ###
 exec 1> >(tee "stdout.log")
@@ -86,8 +121,15 @@ mkdir /mnt/boot
 mount LABEL=EFI /mnt/boot/
 
 # install base system
-pacstrap /mnt base linux linux-firmware amd-ucode git btrfs-progs base-devel
+pacstrap /mnt base linux linux-firmware git btrfs-progs base-devel
 pacstrap /mnt man-db man-pages nano pacman-contrib zsh dialog
+if [ "$cpu_selection" != "nothing" ]; then
+    cpuucode="${cpu_selection}-ucode"
+    echo "CPU microcode will be installed: $cpuucode"
+    pacstrap /mnt $cpuucode
+else
+    echo "No microcrode will be installed."
+fi
 
 # some networking
 pacstrap /mnt openssh

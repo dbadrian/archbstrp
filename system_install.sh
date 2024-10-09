@@ -160,7 +160,7 @@ curl -s "$MIRRORLIST_URL" | \
     rankmirrors -n 5 - > /mnt/etc/pacman.d/mirrorlist
 
 echo "Setting default shell for created user"
-arch-chroot /mnt useradd -mU -s /usr/bin/zsh -G wheel,uucp,video,audio,storage,games,input,docker "$user"
+arch-chroot /mnt useradd -mU -s /usr/bin/zsh -G wheel,uucp,video,audio,storage,games,input "$user"
 arch-chroot /mnt chsh -s /usr/bin/zsh
 touch /mnt/home/$user/.zshrc
 

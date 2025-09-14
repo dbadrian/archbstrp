@@ -17,3 +17,28 @@ If you know what you are looking for, you will find it ;).
 ```bash
 curl -sL arch.dbadrian.com/system_install.sh | bash
 ```
+
+## script relay via cloudflare
+
+1. go to domain
+2. Rules
+3. Create Rule
+
+- name: arch
+- custom filter expression
+- when incoming: hostname, equals, arch.dbadrian.com
+- then: dynamic, concat("https://raw.githubusercontent.com/dbadrian/archbstrp/refs/heads/main/", http.request.uri.path), 301
+- preserver query string TRUE
+- place at: first
+
+and system install one
+- archgithub
+- custom
+- when incoming: hostname, equals, ab.dbadrian.com
+- then: static, https://raw.githubusercontent.com/dbadrian/archbstrp/refs/heads/main/system_install.sh, 301
+- place after arch
+
+when deploying create new proxy dns: CNAME, name, dbadrian.com
+
+curl -sL arch.dbadrian.com/system_install.sh | bash
+curl -sL ab.dbadrian.com | bash

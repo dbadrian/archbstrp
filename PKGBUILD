@@ -1,9 +1,9 @@
 # Maintainer: Michael Daffin <michael@daffin.io>
 pkgbase=dba
-pkgname=(dba-base dba-desktop dba-dev dba-image dba-circuit dba-arduino dba-notes dba-tex dba-finance )
+pkgname=(dba-base dba-desktop dba-dev dba-image dba-circuit dba-arduino dba-notes dba-tex dba-finance)
 pkgver=1
-pkgrel=37
-pkgdesc="DBA setup"
+pkgrel=39
+pkgdesc="Provides standard packages I want on my personal (home) setup for working and daily life."
 arch=(any)
 url="https://github.com/dbadrian/archbtsrp"
 license=(MIT)
@@ -75,7 +75,7 @@ package_dba-base() {
         sshfs
         compsize # btrfs compression rate
         dislocker # bitlocker access
-	mtpfs # mobile phoe
+        mtpfs # mobile phoe
     )
 
     # Networking / Keys
@@ -85,15 +85,38 @@ package_dba-base() {
     depends+=(gnome-keyring gnupg pass)
 
     # General tools
-    depends+=(git cmake diff-so-fancy gitg)
+    depends+=(
+        git
+        cmake
+        diff-so-fancy 
+        gitg # ui for git
+        lazygit # tui for git
+        bfg # faster filter of troublesome blobs in git (cf. git-filter-branch)
+        jq # json formattting
+    )
 
     # Backup solutions and other file related things
-    depends+=(restic rsync)
+    depends+=(restic rsync backblaze-b2)
 
     # hardware tools
-    depends+=(lm_sensors i2c-tools)
+    depends+=(
+      lm_sensors # sensors access (cpu, nvme e.g.)
+      i2c-tools # above
+      f3 # test flash devices
+      
+    )
 }
 
+package_dba-systembenchmark() {
+    depends=(dba-base)
+
+    depends+=(
+      geekbench
+      mprime
+      glances-git
+
+    )
+}
 
 package_dba-desktop() {
     install=dba-desktop.install
@@ -101,7 +124,7 @@ package_dba-desktop() {
     depends=(dba-base)
 
     # text editor
-    depends+=(sublime-text-3)
+    depends+=(neovim)
 
     # Xorg
     depends+=(
@@ -118,13 +141,16 @@ package_dba-desktop() {
     depends+=(xf86-video-amdgpu mesa radeontop) # vulkan-radeon
 
     # video acceleration
-    depends+=(libva-mesa-driver mesa-vdpau libva-utils vdpauinfo)
+    depends+=(libva-mesa-driver mesa-vdpau libva-utils vdpauinfo libdxvk lib32-libdxvk)
 
     # terminal stuff
-    depends+=(terminator)
+    depends+=(wezterm)
 
     # browsers
     depends+=(firefox google-chrome)
+
+    # vpn
+    depends+=(mullvad-vpn-bin)
 
     # audio
     depends+=(
@@ -150,10 +176,13 @@ package_dba-desktop() {
     depends+=(bluez bluez-utils blueman)
 
     # messengers
-    depends+=(signal-desktop telegram-desktop zoom skypeforlinux-stable-bin)
+    depends+=(signal-desktop zoom)
 
     # keys/ pass /gnupg
-    depends+=(seahorse)
+    depends+=(
+      seahorse
+      ausweisapp2
+    )
 
     # printing
     depends+=(
@@ -167,6 +196,7 @@ package_dba-desktop() {
     depends+=(
         mplayer
         vlc
+        vlc-plugins-all
     )
 
     # downloader stuff
@@ -178,14 +208,15 @@ package_dba-desktop() {
     # console tools
     depends+=(
         genius
-        # ansiweather
-        # colout-git # color arbritary console outpit
-        # fasd-git # faster console stuff, not sure if needed with zsh
+        bmon # network monitoring
+        usbmon # usb monitoring
+        usbtop #...
     )
 
-    # archive/compress
+    # files/archive/compress
     depends+=(
         file-roller
+        baobab
     )
 
     #qol
@@ -193,12 +224,23 @@ package_dba-desktop() {
         flameshot
         redshift-git
         redshift-gtk-git
+        caffeine-ng
     )
 
     # PDF
     depends+=(
         okular
         masterpdfeditor
+    )
+
+    # ebooks
+    depends+=(
+      calibre
+    )
+
+    # gaming
+    depends+=(
+      steam
     )
 }
 
@@ -235,11 +277,6 @@ package_dba-dev() {
         # flutter-group-pacman-hook # only needed if flutter is installed!?
     )
 
-    # some hardware related debugging tools
-    depends+=(
-        usbtop
-    )
-
     # binary analysis tools
     depends+=(
         bytewalk
@@ -253,12 +290,17 @@ package_dba-dev() {
         ccache
         clang
         cloc
+        zig
+        odin
     )
 
     # rest debugging and stuff
     depends+=(
-        postman-bin
-    )
+        postman-bin  # for api/rest
+        ghidra # reverse engineering
+        go-task # task runner
+        uv # poetry alternative
+   )
 
     # devtools
     #################################
@@ -301,7 +343,7 @@ package_dba-notes() {
     depends=(dba-desktop)
 
     depends+=(
-        zotero
+        zotero-bin
         # joplin-desktop
         libreoffice-fresh
         libreoffice-fresh-de
@@ -317,6 +359,7 @@ package_dba-arduino() {
         rshell
         avrdude
         minicom
+        nodemcu-pyflasher
     )
 }
 
@@ -325,17 +368,7 @@ package_dba-font() {
     depends=(dba-base)
 
     depends+=(
-        # acroread-fonts-systemwide
-        # adobe-base-14-fonts
-        # awesome-terminal-fonts-git
-        # awesome-terminal-fonts-patched
-        # ttf-inconsolata-g
-        # ttf-koruri
-        # ttf-monapo
-        # ttf-mplus
-        # ttf-ms-fonts
-        # ttf-vlgothic
-        # otf-eb-garamond
+       nerd-fonts
     )
 }
 
@@ -346,6 +379,8 @@ package_dba-circuit() {
         qucs
         kicad
         kicad-library
+        esp-idf
+        esphome # not really for circuit design but well...
         # gspiceui
         # ngspice-git
     )

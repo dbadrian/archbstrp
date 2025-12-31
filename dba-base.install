@@ -3,5 +3,5 @@ post_install() {
 }
 
 post_upgrade() {
-    systemctl enable ly.service
+    systemctl enable ly@tty1.service
 }

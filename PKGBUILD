@@ -2,7 +2,7 @@
 pkgbase=dba
 pkgname=(dba-base dba-desktop dba-dev dba-image dba-circuit dba-arduino dba-notes dba-tex dba-finance)
 pkgver=1
-pkgrel=39
+pkgrel=41
 pkgdesc="Provides standard packages I want on my personal (home) setup for working and daily life."
 arch=(any)
 url="https://github.com/dbadrian/archbtsrp"
@@ -141,7 +141,7 @@ package_dba-desktop() {
     depends+=(xf86-video-amdgpu mesa radeontop) # vulkan-radeon
 
     # video acceleration
-    depends+=(libva-mesa-driver mesa-vdpau libva-utils vdpauinfo libdxvk lib32-libdxvk)
+    depends+=(libva-mesa-driver libva-utils vdpauinfo libdxvk lib32-libdxvk)
 
     # terminal stuff
     depends+=(wezterm)
